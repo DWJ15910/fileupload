@@ -2,8 +2,9 @@
 <%@ page import = "com.oreilly.servlet.MultipartRequest" %>
 <%@ page import = "com.oreilly.servlet.multipart.DefaultFileRenamePolicy" %>
 <%@ page import = "java.io.*" %>
-
-<%@ page import = "vo.*" %>
+<%@ page import = "java.sql.*" %>
+<%@ page import="java.net.*" %>
+<%@ page import="vo.*" %>
 <%
 	String dir = request.getServletContext().getRealPath("/upload");
 	int max = 10 * 1024 * 1024;
@@ -54,4 +55,36 @@
 	System.out.println(type + "<--type");
 	System.out.println(originFilename + "<--originFilename");
 	System.out.println(saveFilename + "<--saveFilename");
+	
+	//DB연동
+	String driver="org.mariadb.jdbc.Driver";
+	String dburl="jdbc:mariadb://127.0.0.1:3306/fileupload";
+	String dbuser="root";
+	String dbpw = "java1234";
+	Class.forName(driver);
+	Connection conn = null;
+	conn = DriverManager.getConnection(dburl,dbuser,dbpw);
+	
+	String boardSql = "INSERT INTO board(board_title,member_id,updatedate,createdate) VALUES (?,?,now(),now())";
+	PreparedStatement boardStmt = conn.prepareStatement(boardSql,PreparedStatement.RETURN_GENERATED_KEYS);
+	boardStmt.setString(1,boardTitle);
+	boardStmt.setString(2,memberId);
+	boardStmt.executeUpdate();
+	
+	ResultSet keyRs = boardStmt.getGeneratedKeys();
+	int boardNo = 0;
+	if(keyRs.next()){
+		boardNo = keyRs.getInt(1);
+	}
+	
+	String fileSql = "INSERT INTO board_file(board_no,origin_filename,save_filename,type,path,createdate) values (?,?,?,?,'upload',now())";
+	PreparedStatement fileStmt = conn.prepareStatement(fileSql);
+	fileStmt.setInt(1,boardNo);
+	fileStmt.setString(2,originFilename);
+	fileStmt.setString(3,saveFilename);
+	fileStmt.setString(4,type);
+	fileStmt.executeUpdate();
+	
+	response.sendRedirect(request.getContextPath()+"/boardList.jsp");
+	
 %>
