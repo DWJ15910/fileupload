@@ -4,6 +4,8 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
 	<%
@@ -28,9 +30,7 @@
 			</form>
 	<%
 		}else{
-	%>
-			<a href="<%=request.getContextPath() %>/addBoard.jsp">파일 업로드</a>
-	<%
+			response.sendRedirect(request.getContextPath()+"/boardList.jsp");
 		}
 	%>
 </body>
