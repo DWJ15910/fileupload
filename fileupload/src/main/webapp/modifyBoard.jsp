@@ -26,34 +26,40 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-<style type="text/css">
-	table, th, td {
-		border: 1px solid #FF0000;
-	}
-</style>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
-	<h1>board & boardFile 수정</h1>
-	<form action="<%=request.getContextPath()%>/modifyBoardAction.jsp" 
-			method="post" enctype="multipart/form-data">
-		<input type="hidden" name="boardNo" value="<%=map.get("boardNo")%>">
-		<input type="hidden" name="boardFileNo" value="<%=map.get("boardFileNo")%>">
-		<table>
-			<tr>
-				<th>boardTitle</th>
-				<td>
-					<textarea rows="3" cols="50" name="boardTitle"
-						required="required"><%=map.get("boardTitle")%></textarea>
-				</td>
-			</tr>
-			<tr>
-				<th>boardFile(수정전 파일 : <%=map.get("originFilename")%>)</th>
-				<td>
-					<input type="file" name="boardFile">
-				</td>
-			</tr>
-		</table>
-		<button type="submit">수정</button>
-	</form>
+	<!-- 메인메뉴 (가로) -->
+	<div>
+		<jsp:include page="/mainnavi.jsp"></jsp:include>
+	</div>
+	<div class="container">
+	<br>
+	<h1>수정페이지</h1>
+	<hr>
+		<form action="<%=request.getContextPath()%>/modifyBoardAction.jsp" method="post" enctype="multipart/form-data">
+			<!-- 히든으로 넘어갈 데이터 -->
+			<input class="form-control" type="hidden" name="boardNo" value="<%=map.get("boardNo")%>">
+			<input class="form-control" type="hidden" name="boardFileNo" value="<%=map.get("boardFileNo")%>">
+			
+			<table class="table">
+				<tr>
+					<th>게시물 제목</th>
+					<td>
+						<textarea class="form-control" rows="3" cols="50" name="boardTitle"
+							required="required"><%=map.get("boardTitle")%></textarea>
+					</td>
+				</tr>
+				<tr>
+					<th>게시물 파일<br>수정전 파일 : <%=map.get("originFilename")%></th>
+					<td>
+						<input class="form-control" type="file" name="boardFile">
+					</td>
+				</tr>
+			</table>
+			<button style="float:right;" class="btn btn-secondary" type="submit">수정</button>
+		</form>
+	</div>
 </body>
 </html>
